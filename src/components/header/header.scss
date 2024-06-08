@@ -1,0 +1,129 @@
+@import "../../assets/styles/color";
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: $container-color;
+  height: 65px;
+  padding: 0 10px;
+  color: black;
+
+  .container-first {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+
+    .menu {
+      width: 3rem;
+      height: 3rem;
+      align-content: center;
+      border-radius: 50%;
+      font-size: 1.2rem;
+    }
+    .menu:hover {
+      background-color: $header-hover-color;
+      cursor: pointer;
+    }
+  
+    .logo {
+      background-image: url("/take_notes.png");
+      background-size: cover;
+      height: 4rem;
+      width: 10rem;
+      margin-left: 5px;
+    }
+    .logo:hover {
+      cursor: pointer;
+    }
+  
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin-left: 60px;
+  
+      .search-input {
+        display: flex;
+        align-items: center;
+        background-color: $search-bar-color;
+        padding: 5px 10px;
+        border-radius: 8px;
+        height: 35px;
+        
+        .seacrh-icon {
+          width: 2rem;
+          height: 2rem;
+          align-content: center;
+          border-radius: 50%;
+        }
+        .seacrh-icon:hover {
+          background-color: $search-bar-hover-color;
+          cursor: pointer;
+        }
+  
+        input {
+          width: 400px;
+          border: none;
+          background: none;
+          padding: 5px;
+          font-size: 1rem;
+          outline: none;
+          color: black;
+        }
+  
+        .close-icon {
+          position: absolute;
+          left: 38.5%;
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .close-icon:hover {
+          background-color: $search-bar-hover-color;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .container-second {
+    display: flex;
+    align-items: center;
+
+    .refresh {
+      width: 2.5rem;
+      height: 2.5rem;
+      align-content: center;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      margin-right: 10px;
+    }
+    .refresh:hover {
+       background-color: $header-hover-color;
+       cursor: pointer;
+    }
+    
+    .setting {
+      width: 2.5rem;
+      height: 2.5rem;
+      align-content: center;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      margin-right: 10px;
+    }
+    .setting:hover {
+       background-color: $header-hover-color;
+       cursor: pointer;
+    }
+
+    .user {
+      width: 2rem;
+      height: 2rem;
+      background-size: cover;
+      border-radius: 50%;
+      margin: 0 10px 0 5px;
+    }
+  }
+}
