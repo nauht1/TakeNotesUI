@@ -1,0 +1,21 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-layout {
+  display: flex;
+
+  .content {
+    transition: margin-left 0.3s ease;
+    margin-top: var(--header-height);
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    background-color: #d9dfe7;
+
+    &.sidebar-collapsed {
+      margin-left: var(--sidebar-collapsed-width);
+    }
+  }
+}

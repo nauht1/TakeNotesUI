@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import "./header.scss";
+import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({onMenuClick}) => {
   const [showCloseIcon, setShowCloseIcon] = useState(false);
   const inputRef = useRef(null);
 
@@ -24,14 +25,16 @@ const Header = () => {
 	return (
     <header className="header">
       <div className="container-first">
-        <div className="menu">
-          <i class="fa-solid fa-bars"></i>
+        <div className="menu" onClick={onMenuClick}>
+          <i className="fa-solid fa-bars"></i>
         </div>
-        <div className="logo"></div>
+        <Link to = "/home">
+          <div className="logo"></div>
+        </Link>
         <div className="search-bar">
           <div className="search-input">
             <div className="seacrh-icon">
-              <i class="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
             </div>
             <input type="text" 
               placeholder="Search" 
@@ -41,7 +44,7 @@ const Header = () => {
             
             {showCloseIcon && (
               <div className="close-icon" onClick={handleCloseClick}>
-                <i class="fa-solid fa-xmark"></i>
+                <i className="fa-solid fa-xmark"></i>
               </div>
             )}
           </div>
@@ -49,10 +52,10 @@ const Header = () => {
       </div>
       <div className="container-second">
         <div className="refresh">
-          <i class="fa-solid fa-arrows-rotate"></i>
+          <i className="fa-solid fa-arrows-rotate"></i>
         </div>
         <div className="setting">
-          <i class="fa-solid fa-gear"></i>
+          <i className="fa-solid fa-gear"></i>
         </div>
         <div className="user">
           <img src="/vite.svg" alt="user_avatar" />

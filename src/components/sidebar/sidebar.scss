@@ -1,0 +1,56 @@
+@import "../../assets/styles/_color.scss";
+@import "../../index.css";
+
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: $side-bar-color;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  margin-top: var(--header-height);
+  z-index: 99;
+  transition: width 0.3s ease;
+
+  &.collapsed {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  .sidebar-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: black;
+    text-decoration: none;
+    
+    .sidebar-icon {
+      width: 2rem;
+      height: 2rem;
+      align-content: center;
+      border-radius: 50%;
+    }
+
+    span {
+      opacity: 1;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      visibility: visible;
+      position: absolute;
+      left: 3.5rem;
+      white-space: nowrap;
+    }
+
+    &.collapsed span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &:hover {
+      background-color: $active-sidebar-color;
+    }
+
+    &.active {
+      background-color: $active-sidebar-color;
+    }
+  }
+}
