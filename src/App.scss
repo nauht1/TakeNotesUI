@@ -4,8 +4,64 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+::-moz-scrollbar {
+  width: 10px;
+}
+
+::-moz-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-moz-scrollbar-thumb {
+  background: #888;
+}
+
+::-moz-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Internet Explorer */
+::-ms-scrollbar {
+  width: 10px;
+}
+
+::-ms-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-ms-scrollbar-thumb {
+  background: #888;
+}
+
+::-ms-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.modal {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .main-layout {
   display: flex;
+  min-height: 100vh;
 
   .content {
     transition: margin-left 0.3s ease;
