@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
+import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./noteForm.scss";
@@ -20,14 +21,14 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    onChange({ title: e.target.value, content, images });
-    scheduleAutoSave({ title: e.target.value, content, images });
+    onChange({ ...note, title: e.target.value });
+    scheduleAutoSave({ ...note, title: e.target.value });
   };
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
-    onChange({ title, content: e.target.value, images });
-    scheduleAutoSave({ title, content: e.target.value, images });
+    onChange({ ...note, content: e.target.value });
+    scheduleAutoSave({ ...note, content: e.target.value });
   };
 
   const handleImageChange = (e) => {
@@ -40,33 +41,44 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
       toast.error("Invalid file type or size. Only JPG/PNG images less than 20MB are allowed.");
     }
     
-    const newImages = [...validFiles.map(file => URL.createObjectURL(file))];
-    setImages(prevImages => [...prevImages, ...newImages]);
-    onChange({ title, content, images: [...images, ...newImages] });
-    scheduleAutoSave({ title, content, images: [...images, ...newImages] });
+    const newImages = [...validFiles.map(file => ({id: uuidv4(), src: URL.createObjectURL(file)}))];
+    const updatedNote = { ...note, images: [...images, ...newImages] };
+    setImages(updatedNote.images);
+    onChange(updatedNote);
+    scheduleAutoSave(updatedNote);
+    // setImages(prevImages => [...prevImages, ...newImages]);
+    // onChange({ id: note.id, title, content, images: [...images, ...newImages] });
+    // scheduleAutoSave({ id: note.id, title, content, images: [...images, ...newImages] });
   };
 
   const handleFormSubmit = () => {
-    onSubmit({ title, content, images });
+    onSubmit({ ...note, modified: new Date().toLocaleString('en-GB', { hour12: false }) });
+    // onSubmit({ id: note.id, title, content, images });
     onRequestClose();
   };
 
-  const scheduleAutoSave = (note) => {
+  const scheduleAutoSave = (updatedNote) => {
     if (autoSaveTimer) {
       clearTimeout(autoSaveTimer);
     }
 
     const timer = setTimeout(() => {
-      onSubmit(note);
+      updatedNote.modified = new Date().toLocaleString('en-GB', { hour12: false });
+      onSubmit(updatedNote);
+      // onSubmit(note);
     }, 2000)
     setAutoSaveTimer(timer);
   }
 
-  const removeImage = (imageToRemove) => {
-    const updatedImages = images.filter(image => image !== imageToRemove);
+  const removeImage = (imageId) => {
+    const updatedImages = images.filter(image => image.id !== imageId);
+    const updatedNote = { ...note, images: updatedImages };
     setImages(updatedImages);
-    onChange({ title, content, images: updatedImages });
-    scheduleAutoSave({ title, content, images: updatedImages });
+    onChange(updatedNote);
+    scheduleAutoSave(updatedNote);
+    // setImages(updatedImages);
+    // onChange({ id: note.id, title, content, images: updatedImages });
+    // scheduleAutoSave({ id: note.id, title, content, images: updatedImages });
   };
   
   useEffect(() => {
@@ -102,9 +114,9 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
       <form onSubmit={e => e.preventDefault()} className="note-form">
         <div className={`modal-images-grid ${getGridClass()}`}>
           {images.map((image, index) => (
-            <div key={index} className="modal-container">
-              <img src={image} alt={`note-${index}`} className="modal-thumbnail" />
-              <button className="remove-image-button" onClick={() => removeImage(image)}>
+            <div key={image.id} className="modal-container">
+              <img src={image.src} alt={`note-${index}`} className="modal-thumbnail" />
+              <button className="remove-image-button" onClick={() => removeImage(image.id)}>
                 <i className="fa-solid fa-trash"></i>
               </button>
             </div>
@@ -144,6 +156,7 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
         <div className="note-form-buttons">
           <button type="button" onClick={handleFormSubmit} className="submit-button">Save</button>
         </div>
+        {isEdit && <div className="note-form-modified">Last modified: {note.modified}</div>}
       </form>
       <ToastContainer />
     </Modal>

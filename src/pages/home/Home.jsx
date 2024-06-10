@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import "./home.scss";
 import Note from "../../components/note/Note.jsx";
 import Modal from "react-modal";
@@ -6,25 +7,35 @@ import NoteForm from "../../components/noteForm/NoteForm.jsx";
 
 Modal.setAppElement("#root");
 
+const getCurrentTimeString = () => {
+  const now = new Date();
+
+  const formatWithLeadingZero = (number) => (number < 10 ? `0${number}` : number.toString());
+  const hours = formatWithLeadingZero(now.getHours());
+  const minutes = formatWithLeadingZero(now.getMinutes());
+
+  return `${hours}:${minutes} ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+}
+
 const initialNotes = [
-  { title: "Giao diện tối đã ra mắt", content: "Tận hưởng trải nghiệm đọc thoải mái hơn. Bật hoặc tắt tính năng này trong phần Cài đặt.", images: ["./take_notes.png"] },
-  { title: "", content: "4545454545", images: [] },
-  { title: "", content: "0357008151\n123456789", images: ["./relax.jpg"] },
-  { title: "", content: "k", images: ["./relax.jpg", "./relax.jpg"] },
-  { title: "", content: "dasdas\ndasdas", images: ["./app_logo.png"] },
-  { title: "", content: "", images: ["./app_logo.png", "./app_logo.png", "./relax.jpg"] },
-  { title: "", content: "6/11 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30 \n 7h30\n 7h30sáng phòng 2 (dưới)\nR 75 L 45p\nP:\nilovejesus#\n5370CD#", images: ["./take_notes.png"] },
-  { title: "HIHIIHIHI", content: "dasdsdsds dasdasasdsdsdddddds asdsdsddddddsas dsdsdddddds asdsdsddddddsasdsdsdddd ddsasddddddddddddddddddddddddddddddddddddddddddsdsd ddddds asdsdsdd ddddsas dsdsdddddd sasdsds dddddd", images: ["./app_logo.png", "./take_notes.png", "./take_notes.png", "./relax.jpg", "./relax.jpg", "./relax.jpg"] }
+  { id: uuidv4(), title: "Giao diện tối đã ra mắt", content: "Tận hưởng trải nghiệm đọc thoải mái hơn. Bật hoặc tắt tính năng này trong phần Cài đặt.", images: [{ id: uuidv4(), src: "./take_notes.png" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "4545454545", images: [], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "0357008151\n123456789", images: [{ id: uuidv4(), src: "./relax.jpg" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "k", images: [{ id: uuidv4(), src: "./relax.jpg" }, { id: uuidv4(), src: "./relax.jpg" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "dasdas\ndasdas", images: [{ id: uuidv4(), src: "./app_logo.png" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "", images: [{ id: uuidv4(), src: "./app_logo.png" }, { id: uuidv4(), src: "./app_logo.png" }, { id: uuidv4(), src: "./relax.jpg" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "", content: "6/11 \n 7h30 \n \n 7h30 \n 7h30 \n 7h30 \n 7h30sáng phòng 2 (dưới)\nR 75 L 45p\nP:\nilovejesus#\n5370CD#", images: [{ id: uuidv4(), src: "./take_notes.png" }], modified: getCurrentTimeString() },
+  { id: uuidv4(), title: "HIHIIHIHI", content: "dasdsdsds  asdsdsddddddsasdsdsdddd ddsasddddddddddddddddddddddddddsddssssssd ddddds asdsdsdd ddddsas dsdsdddddd sasdsds dddddd", images: [{ id: uuidv4(), src: "./app_logo.png" }, { id: uuidv4(), src: "./take_notes.png" }, { id: uuidv4(), src: "./take_notes.png" }, { id: uuidv4(), src: "./relax.jpg" }, { id: uuidv4(), src: "./relax.jpg" }, { id: uuidv4(), src: "./relax.jpg" }], modified: getCurrentTimeString() }
 ];
 
 const Home = () => {
   const [notes, setNotes] = useState(initialNotes);
   const [isNoteFormOpen, setIsNoteFormOpen] = useState(false);
-  const [currentNote, setCurrentNote] = useState({ title: "", content: "", images: [] });
+  const [currentNote, setCurrentNote] = useState({ id: uuidv4(), title: "", content: "", images: [], modified: getCurrentTimeString() });
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
-  const openNoteForm = (note = { title: "", content: "", images: [] }, index = null) => {
+  const openNoteForm = (note = { id: uuidv4(), title: "", content: "", images: [], modified: getCurrentTimeString() }, index = null) => {
     setCurrentNote(note);
     setEditIndex(index);
     setIsEdit(index !== null);
@@ -40,17 +51,19 @@ const Home = () => {
       setNotes(updatedNotes);
     }
     setIsNoteFormOpen(false);
-    setCurrentNote({ title: "", content: "", images: [] });
+    setCurrentNote({ id: uuidv4(), title: "", content: "", images: [], modified: getCurrentTimeString() });
     setIsEdit(false);
     setEditIndex(null);
   }
 
   const handleNoteChange = (note) => {
-    setCurrentNote(note);
+    // setCurrentNote(note);
+    setCurrentNote({ ...note, modified: getCurrentTimeString() });
   }
 
   const autoSaveNote = (note) => {
-    // setCurrentNote(note);
+    note.modified = getCurrentTimeString();
+
     if (isEdit && editIndex !== null) {
       const updatedNotes = [...notes];
       updatedNotes[editIndex] = note;
@@ -71,10 +84,11 @@ const Home = () => {
       <div className="notes-grid">
         {notes.map((note, index) => (
           <Note 
-            key={index} 
+            key={note.id} 
             title={note.title} 
             content={note.content} 
             images={note.images} 
+            modified={note.modified}
             onEdit={() => openNoteForm(note, index)}/>
         ))}
       </div>
