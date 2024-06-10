@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from 'react-modal';
 import "./note.scss";
 
-const Note = ({ title, content, images }) => {
+const Note = ({ title, content, images, onEdit }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -60,6 +60,7 @@ const Note = ({ title, content, images }) => {
             {title && <h3 className="modal-title">{title}</h3>}
             <p>{content}</p>
           </div>
+          <button className="edit-button" onClick={() => { closeModal(); onEdit(); }}>Edit</button>
           <button onClick={closeModal} className="close-button">Close</button>
         </div>
       </Modal>

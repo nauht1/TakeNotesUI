@@ -1,0 +1,174 @@
+@import "../../assets/styles/color";
+
+.home-section {
+  .create-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: $side-bar-color;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 1px rgba(0,0,0,1);
+    cursor: pointer;
+
+    input {
+      background: none;
+      border: none;
+      color: inherit;
+      width: 100%;
+      outline: none;
+    }
+
+    .icons {
+      display: flex;
+      gap: 10px;
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.note-form-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: $side-bar-color;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  .note-form {
+    display: flex;
+    flex-direction: column;
+    
+    input, textarea {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .image-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+
+      .image-thumbnail {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+    }
+
+    .note-form-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      color: inherit;
+    }
+
+    .note-form-content {
+      font-size: 16px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      color: inherit;
+      height: 100px;
+      resize: none;
+    }
+
+    .note-form-actions {
+      display: flex;
+      align-items: center;
+      position: relative;
+      
+      .actions-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .image-upload-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+  
+          .upload-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+          }
+  
+          &:hover{
+            background-color: #fff;
+          }
+        }
+        
+        .actions-text {
+          width: auto;
+          height: auto;
+          padding: 5px;
+          margin-top: 5px;
+          border-radius: 5px;
+          background-color: #ccc;
+          position: absolute;
+          transform: translateY(40px);
+          text-wrap: nowrap;
+        }
+
+        .image-upload-input {
+          display: none;
+        }
+      }
+      
+    }
+
+    .note-form-buttons {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        padding: 10px 20px;
+        background: #ff5a5f;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+
+        &:hover {
+          background: #ff1c1f;
+        }
+      }
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+@keyframes showText {
+  to {
+    display: inline-block;
+  }
+}
