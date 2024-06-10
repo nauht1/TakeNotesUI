@@ -60,6 +60,8 @@ const Note = ({ title, content, images, onEdit }) => {
             {title && <h3 className="modal-title">{title}</h3>}
             <p>{content}</p>
           </div>
+        </div>
+        <div className="btns-group">
           <button className="edit-button" onClick={() => { closeModal(); onEdit(); }}>Edit</button>
           <button onClick={closeModal} className="close-button">Close</button>
         </div>

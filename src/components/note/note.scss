@@ -95,7 +95,43 @@
 .modal-content {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.btns-group {
+  display: flex;
   align-items: flex-end;
+  justify-content: flex-end;
+
+  .edit-button {
+    background-color: #41c745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 80px;
+    margin-right: 10px;
+  }
+  .edit-button:hover {
+    background-color: #28c02d;
+  }
+  
+  .close-button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 80px;
+  }
+  
+  .close-button:hover {
+    background-color: #ff1c1f;
+  }
 }
 
 .modal-images-grid {
@@ -105,6 +141,13 @@
 
   &.images-count-1 {
     grid-template-columns: 1fr;
+    place-items: center;
+
+    .modal-thumbnail {
+      max-width: 100%;
+      max-height: 40vh;
+      object-fit: contain;
+    }
   }
 
   &.images-count-2 {
@@ -122,6 +165,8 @@
   .modal-thumbnail {
     width: 100%;
     height: auto;
+    max-height: 70vh;
+    object-fit: contain;
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.2s;
@@ -142,24 +187,6 @@
 .modal-title {
   font-size: 24px;
   margin-bottom: 20px;
-}
-
-.edit-button {
-  margin: 10px 0px;
-}
-
-.close-button {
-  background-color: #ff5a5f;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.close-button:hover {
-  background-color: #ff1c1f;
 }
 
 .image-modal {
@@ -186,6 +213,8 @@
 
 .full-size-image {
   max-width: 100%;
+  max-height: 70vh;
   height: auto;
+  object-fit: contain;
   border-radius: 10px;
 }

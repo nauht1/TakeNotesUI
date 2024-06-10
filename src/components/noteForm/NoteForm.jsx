@@ -90,16 +90,23 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
     }
   }, [autoSaveTimer]);
 
+  const getGridClass = () => {
+    if (images.length === 1) return 'images-count-1';
+    if (images.length === 2) return 'images-count-2';
+    if (images.length === 3) return 'images-count-3';
+    return 'images-count-more';
+  };
+
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="note-form-modal" overlayClassName="overlay">
       <form onSubmit={e => e.preventDefault()} className="note-form">
-        <div className="image-preview">
+        <div className={`modal-images-grid ${getGridClass()}`}>
           {images.map((image, index) => (
-            <div key={index} className="image-container" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-              <img src={image} alt={`preview-${index}`} className="image-thumbnail" />
-              {isHovered && (
-                <button className="remove-image-button" onClick={() => removeImage(image)}>🗑️</button>
-              )}
+            <div key={index} className="modal-container">
+              <img src={image} alt={`note-${index}`} className="modal-thumbnail" />
+              <button className="remove-image-button" onClick={() => removeImage(image)}>
+                <i className="fa-solid fa-trash"></i>
+              </button>
             </div>
           ))}
         </div>
