@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import viteLogo from '/vite.svg'
 import './App.scss'
 import Header from './components/header/Header.jsx'
 import Home from './pages/home/Home.jsx'
@@ -8,15 +7,24 @@ import Login from './pages/login/Login.jsx'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Trash from './pages/trash/Trash.jsx'
 import NotFound from './pages/notFound/NotFound.jsx';
+import Profile from './pages/profile/Profile.jsx';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userProfile, setUserProfile] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
+    const storedProfile = localStorage.getItem('userProfile');
     if (token) {
       setIsAuthenticated(true);
+
+      if (storedProfile) {
+        setUserProfile(JSON.parse(storedProfile));
+      } else {
+        console.log('Failed to fetch user profile');
+      }
     }
   }, []);
 
@@ -24,10 +32,15 @@ function App() {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (profile) => {
     setIsAuthenticated(true);
-    console.log(isAuthenticated);
+    setUserProfile(profile);
   }
+  
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserProfile(null);
+  };
 
   const ProtectedRoute = ({ element }) => {
     return isAuthenticated ? element : <Navigate to="/login" />;
@@ -38,7 +51,7 @@ function App() {
       <ProtectedRoute
         element={
           <div className="main-layout">
-            <Header onMenuClick={handleMenuClick} />
+            <Header onMenuClick={handleMenuClick} userProfile={userProfile} onLogout={handleLogout} />
             <Sidebar isCollapsed={isSidebarCollapsed} />
             <div className={`content ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
               {children}
@@ -67,6 +80,10 @@ function App() {
         <Route
           path="/trash"
           element={<ProtectedComponent><Trash /></ProtectedComponent>}
+        />
+         <Route
+          path="/profile"
+          element={<ProtectedComponent><Profile userProfile={userProfile} /></ProtectedComponent>}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

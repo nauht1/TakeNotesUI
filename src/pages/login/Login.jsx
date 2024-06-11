@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
+import {axiosToken, axiosNoToken} from "../../config/axiosConfig.js";
 import "./login.scss";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -9,7 +11,7 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
+      const response = await axiosNoToken.post("auth/authenticate", {
         email,
         password
       });
@@ -17,10 +19,16 @@ const Login = ({ onLogin }) => {
       const {accessToken, refreshToken} = response.data;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      onLogin();
+
+
+      const profileResponse = await axiosToken.get("/user/profile");
+      const userProfile = profileResponse.data.body;
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+      onLogin(userProfile);
     }
     catch (error) {
-      alert("Invalid credentials");
+      toast.error("Invalid credentials")
     }
   }
 

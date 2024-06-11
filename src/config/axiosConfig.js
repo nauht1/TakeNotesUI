@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const instance = axios.create({
+const axiosToken = axios.create({
   baseURL: "http://localhost:8080/api/v1"
 });
 
-export default instance.interceptors.request.use(
+axiosToken.interceptors.request.use(
   config => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -15,3 +15,8 @@ export default instance.interceptors.request.use(
   error => Promise.reject(error)
 );
 
+const axiosNoToken = axios.create({
+  baseURL: "http://localhost:8080/api/v1"
+});
+
+export {axiosToken,axiosNoToken};
