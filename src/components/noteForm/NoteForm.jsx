@@ -110,6 +110,7 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
   };
 
   return (
+    <>
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="note-form-modal" overlayClassName="overlay">
       <form onSubmit={e => e.preventDefault()} className="note-form">
         <div className={`modal-images-grid ${getGridClass()}`}>
@@ -158,8 +159,9 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
         </div>
         {isEdit && <div className="note-form-modified">Last modified: {note.modified}</div>}
       </form>
-      <ToastContainer />
     </Modal>
+    <ToastContainer />
+    </>
   );
 };
 
