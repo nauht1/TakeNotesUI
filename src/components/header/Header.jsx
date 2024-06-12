@@ -1,10 +1,13 @@
 import React, { useRef, useState } from "react";
 import "./header.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
 
-const Header = ({onMenuClick}) => {
+const Header = ({onMenuClick, userProfile, onLogout}) => {
   const [showCloseIcon, setShowCloseIcon] = useState(false);
   const inputRef = useRef(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputFocus = () => {
     setShowCloseIcon(true);
@@ -21,6 +24,23 @@ const Header = ({onMenuClick}) => {
     inputRef.current.value = "";
     inputRef.current.blur();
   }
+
+  const handleUserClick = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axiosToken.post("/auth/logout");
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userProfile');
+      onLogout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
 	return (
     <header className="header">
@@ -57,8 +77,18 @@ const Header = ({onMenuClick}) => {
         <div className="setting">
           <i className="fa-solid fa-gear"></i>
         </div>
-        <div className="user">
-          <img src="/vite.svg" alt="user_avatar" />
+        <div className="user" onClick={handleUserClick}>
+          <img src={userProfile?.avatar_url || "/vite.svg"} alt="user_avatar" />
+          {showDropdown && (
+            <div className="dropdown-menu">
+              <Link to="/profile"className="menu-item" >
+                <i className="fa-solid fa-address-card menu-icon"></i><span>Profile</span>
+              </Link>
+              <div className="menu-item" onClick={handleLogout}>
+                <i className="fa-solid fa-power-off menu-icon"></i><span>Logout</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
