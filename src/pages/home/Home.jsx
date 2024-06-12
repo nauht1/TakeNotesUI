@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import "./home.scss";
 import Note from "../../components/note/Note.jsx";
 import Modal from "react-modal";
 import NoteForm from "../../components/noteForm/NoteForm.jsx";
-import {axiosToken, axiosNoToken} from "../../config/axiosConfig.js";
+import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
 
 Modal.setAppElement("#root");
 
