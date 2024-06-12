@@ -29,7 +29,7 @@ function App() {
   }, []);
 
   const handleMenuClick = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    setIsSidebarCollapsed(prevState => !prevState);
   };
 
   const handleLogin = (profile) => {

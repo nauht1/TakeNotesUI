@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {axiosToken, axiosNoToken} from "../../config/axiosConfig.js";
 import "./login.scss";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = ({ onLogin }) => {
@@ -66,6 +66,7 @@ const Login = ({ onLogin }) => {
           Log in with Google
         </button>
       </form>
+      <ToastContainer />
     </div>
   )
 }

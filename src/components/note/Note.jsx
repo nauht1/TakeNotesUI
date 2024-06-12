@@ -36,11 +36,11 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
     <div className="note-container">
       <div className="note" onClick={openModal}>
         <div className="note-images">
-          {images.length > 0 && <img src={images[0].src} alt="note" className="note-image" />}
+          {images.length > 0 && <img src={images[0]} alt="note" className="note-image" />}
           {images.length > 1 && (
             <div className="note-image-overlay">
               <span className="overlay-text">+{images.length - 1}</span>
-              <img src={images[1].src} alt="note" className="note-image-blur" />
+              <img src={images[1]} alt="note" className="note-image-blur" />
             </div>
           )}
         </div>
@@ -56,7 +56,7 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
         <div className="modal-content">
           <div className={`modal-images-grid ${getGridClass()}`}>
             {images.map((image, index) => (
-              <img key={image.id} src={image.src} alt={`note-${index}`} className="modal-thumbnail" onClick={() => openImageModal(image)} />
+              <img key={index} src={image} alt={`note-${index}`} className="modal-thumbnail" onClick={() => openImageModal(image)} />
             ))}
           </div>
           <div className="modal-details">
@@ -73,7 +73,7 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
         </div>
       </Modal>
       <Modal isOpen={imageModalIsOpen} onRequestClose={closeImageModal} className="image-modal" overlayClassName="overlay">
-        {selectedImage && <img src={selectedImage.src} alt="selected" className="full-size-image" />}
+        {selectedImage && <img src={selectedImage} alt="selected" className="full-size-image" />}
         <button onClick={closeImageModal} className="close-button">Close</button>
       </Modal>
     </div>
