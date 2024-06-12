@@ -41,7 +41,6 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
       console.error("Logout failed", error);
     }
   };
-
 	return (
     <header className="header">
       <div className="container-first">

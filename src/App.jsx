@@ -44,7 +44,27 @@ function App() {
   }, []);
 
   const handleMenuClick = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    setIsSidebarCollapsed(prevState => !prevState);
+  };
+
+  const ProtectedRoute = ({ element }) => {
+    return isAuthenticated ? element : <Navigate to="/login" />;
+  };
+
+  const ProtectedComponent = ({ children }) => {
+    return (
+      <ProtectedRoute
+        element={
+          <div className="main-layout">
+            <Header onMenuClick={handleMenuClick} userProfile={userProfile} onLogout={handleLogout} />
+            <Sidebar isCollapsed={isSidebarCollapsed} />
+            <div className={`content ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+              {children}
+            </div>
+          </div>
+        }
+      />
+    );
   };
 
   const handleLogin = (profile) => {
