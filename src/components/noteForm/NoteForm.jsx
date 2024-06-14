@@ -10,25 +10,25 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
   const [images, setImages] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [showActionsText, setShowActionsText] = useState(false);
-  const [autoSaveTimer, setAutoSaveTimer] = useState(null);
+  const [initialNote, setInitialNote] = useState(note);
 
   useEffect(() => {
-    setTitle(note.title);
-    setContent(note.content);
+    setTitle(note.title || "");
+    setContent(note.content || "");
     setImages(note.image_urls || []);
-    console.log(note.image_urls);
+    setInitialNote(note);
   }, [note]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    onChange({ ...note, title: e.target.value });
-    scheduleAutoSave({ ...note, title: e.target.value });
+    const updatedNote = { ...note, title: e.target.value };
+    onChange(updatedNote);
   };
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
-    onChange({ ...note, content: e.target.value });
-    scheduleAutoSave({ ...note, content: e.target.value });
+    const updatedNote = { ...note, content: e.target.value };
+    onChange(updatedNote);
   };
 
   const handleImageChange = (e) => {
@@ -41,35 +41,26 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
       toast.error("Invalid file type or size. Only JPG/PNG images less than 20MB are allowed.");
     }
     
-    const newImages = [...validFiles.map(file => ({ id: uuidv4(), src: URL.createObjectURL(file) }))];
-    const updatedNote = { ...note, images: [...images, ...newImages] };
-    setImages(updatedNote.images);
+    const newImages = validFiles.map(file => ({ src: URL.createObjectURL(file), file }));
+    const updatedNote = { ...note, image_urls: [...images, ...newImages.map(img => img.src)] };
+    setImages(updatedNote.image_urls);
     onChange(updatedNote);
-    scheduleAutoSave(updatedNote);
   };
 
-  const handleFormSubmit = () => {
-    onSubmit({ ...note, modified: new Date().toLocaleString('en-GB', { hour12: false }) });
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    onSubmit();
     onRequestClose();
   };
 
-  const scheduleAutoSave = (updatedNote) => {
-    if (autoSaveTimer) {
-      clearTimeout(autoSaveTimer);
-    }
-
-    const timer = setTimeout(() => {
-      onSubmit(updatedNote);
-    }, 2000);
-    setAutoSaveTimer(timer);
-  };
-
-  const removeImage = (imageId) => {
-    const updatedImages = images.filter(image => image.id !== imageId);
-    const updatedNote = { ...note, images: updatedImages };
-    setImages(updatedImages);
-    onChange(updatedNote);
-    scheduleAutoSave(updatedNote);
+  const hasChanges = () => {
+    if (!initialNote) return false;
+    return (
+      initialNote.title !== title ||
+      initialNote.content !== content ||
+      initialNote.image_urls?.length !== images.length ||
+      initialNote.image_urls?.some((image, index) => image !== images[index])
+    );
   };
 
   useEffect(() => {
@@ -85,14 +76,13 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
     return () => clearTimeout(timer);
   }, [isHovered]);
 
-  useEffect(() => {
-    return () => {
-      if (autoSaveTimer) {
-        clearTimeout(autoSaveTimer);
-      }
-    };
-  }, [autoSaveTimer]);
-
+  const handleClose = async () => {
+    if (hasChanges()) {
+      await onSubmit();
+    }
+    onRequestClose();
+  };
+  
   const getGridClass = () => {
     if (images.length === 0) return '';
     if (images.length === 1) return 'images-count-1';
@@ -103,7 +93,7 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
 
   return (
     <>
-      <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="note-form-modal" overlayClassName="overlay">
+      <Modal isOpen={isOpen} onRequestClose={handleClose} className="note-form-modal" overlayClassName="overlay">
         <form onSubmit={e => e.preventDefault()} className="note-form">
           {images.length > 0 && (
           <div className={`modal-images-grid ${getGridClass()}`}>

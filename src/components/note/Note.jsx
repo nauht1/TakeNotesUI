@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
 import "./note.scss";
+import { format } from 'date-fns';
 
-const Note = ({ id, title, content, images, modified, onEdit }) => {
+const Note = ({ id, title, content, images, created, onEdit }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -32,6 +33,12 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
     return 'images-count-more';
   };
 
+  const handleEditClick = () => {
+    onEdit({ id, title, content, images, created });
+  };
+
+  const formattedDate = format(new Date(created), 'dd/MM/yyyy HH:mm:ss');
+
   return (
     <div className="note-container">
       <div className="note" onClick={openModal}>
@@ -49,7 +56,7 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
           <p className="note-text">{content}</p>
         </div>
         <div className="note-modified">
-          <p>Last modified: {modified}</p>
+          <p>Last modified: {formattedDate}</p>
         </div>
       </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal" overlayClassName="overlay">
@@ -65,10 +72,10 @@ const Note = ({ id, title, content, images, modified, onEdit }) => {
           </div>
         </div>
         <div className="note-modified">
-          <p>Last modified: {modified}</p>
+          <p>Last modified: {formattedDate}</p>
         </div>
         <div className="btns-group">
-          <button className="edit-button" onClick={() => { closeModal(); onEdit(); }}>Edit</button>
+          <button className="edit-button" onClick={() => { closeModal(); handleEditClick(); }}>Edit</button>
           <button onClick={closeModal} className="close-button">Close</button>
         </div>
       </Modal>
