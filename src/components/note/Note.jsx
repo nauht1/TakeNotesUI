@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
 import "./note.scss";
-import { format } from 'date-fns';
+import {formatDateTime} from "../../utils/Utils.jsx";
 
 const Note = ({ id, title, content, images, created, onEdit }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -37,8 +37,9 @@ const Note = ({ id, title, content, images, created, onEdit }) => {
     onEdit({ id, title, content, images, created });
   };
 
-  const formattedDate = format(new Date(created), 'dd/MM/yyyy HH:mm:ss');
-
+  //Format date time for modified
+  const formattedDate = formatDateTime(created);
+  
   return (
     <div className="note-container">
       <div className="note" onClick={openModal}>

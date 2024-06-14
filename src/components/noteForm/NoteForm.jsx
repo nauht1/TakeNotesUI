@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Modal from 'react-modal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./noteForm.scss";
+import {formatDateTime} from "../../utils/Utils.jsx";
+import debounce from "lodash.debounce";
 
 const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) => {
   const [title, setTitle] = useState("");
@@ -11,6 +13,7 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
   const [isHovered, setIsHovered] = useState(false);
   const [showActionsText, setShowActionsText] = useState(false);
   const [initialNote, setInitialNote] = useState(note);
+  const [lastModified, setLastModified] = useState(note.created);
 
   useEffect(() => {
     setTitle(note.title || "");
@@ -23,12 +26,14 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
     setTitle(e.target.value);
     const updatedNote = { ...note, title: e.target.value };
     onChange(updatedNote);
+    updateModifiedTime();
   };
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
     const updatedNote = { ...note, content: e.target.value };
     onChange(updatedNote);
+    updateModifiedTime();
   };
 
   const handleImageChange = (e) => {
@@ -42,9 +47,10 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
     }
     
     const newImages = validFiles.map(file => ({ src: URL.createObjectURL(file), file }));
-    const updatedNote = { ...note, image_urls: [...images, ...newImages.map(img => img.src)] };
+    const updatedNote = { ...note, image_urls: [...images, ...newImages] };
     setImages(updatedNote.image_urls);
     onChange(updatedNote);
+    updateModifiedTime();
   };
 
   const handleFormSubmit = (e) => {
@@ -77,12 +83,19 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
   }, [isHovered]);
 
   const handleClose = async () => {
-    if (hasChanges()) {
-      await onSubmit();
-    }
     onRequestClose();
   };
   
+  // Trick to update modified time on UI.
+  const updateModifiedTime = useCallback(
+    debounce(async () => {
+      const currentTime = new Date().toISOString();
+      setLastModified(currentTime);
+    }, [2000]),
+    []
+  )
+
+  // Set class for render images in modal rely on total images of note.
   const getGridClass = () => {
     if (images.length === 0) return '';
     if (images.length === 1) return 'images-count-1';
@@ -99,7 +112,7 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
           <div className={`modal-images-grid ${getGridClass()}`}>
             {images.map((image, index) => (
               <div key={index} className="modal-container">
-                <img src={image} alt={`note-${index}`} className="modal-thumbnail" />
+                <img src={image.src || image} alt={`note-${index}`} className="modal-thumbnail" />
                 <button className="remove-image-button" onClick={() => removeImage(image.id)}>
                   <i className="fa-solid fa-trash"></i>
                 </button>
@@ -139,9 +152,9 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
             </div>
           </div>
           <div className="note-form-buttons">
-            <button type="button" onClick={handleFormSubmit} className="submit-button">Save</button>
+            <button type="button" onClick={handleFormSubmit} className="submit-button">Close</button>
           </div>
-          {isEdit && <div className="note-form-modified">Last modified: {note.created}</div>}
+          {isEdit && <div className="note-form-modified">Last modified: {formatDateTime(lastModified)}</div>}
         </form>
       </Modal>
       <ToastContainer />

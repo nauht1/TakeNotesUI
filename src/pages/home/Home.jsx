@@ -15,6 +15,7 @@ const Home = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
+  // Fetch notes of auth user from server
   const fetchNotes = async () => {
     try {
       const response = await axiosToken.get("/note/all");
@@ -28,6 +29,7 @@ const Home = () => {
     fetchNotes();
   }, []);
 
+  //Create a null note when click on 'Note here'
   const createNewNote = async () => {
     try {
       const response = await axiosToken.post("/note/add", new FormData());
@@ -58,9 +60,6 @@ const Home = () => {
   };
 
   const closeNoteForm = async () => {
-    if (currentNote.title || currentNote.content || (currentNote.images && currentNote.images.length > 0)) {
-      await saveNote(currentNote);
-    }
     setIsNoteFormOpen(false);
     setCurrentNote({ id: "", title: "", content: "", images: [], created: "" });
     setIsEdit(false);
@@ -75,11 +74,9 @@ const Home = () => {
         if (note.title) formData.append("title", note.title);
         if (note.content) formData.append("content", note.content);
         if (note.image_urls && note.image_urls.length > 0) {
-          note.image_urls.forEach((image, index) => {
+          note.image_urls.forEach((image) => {
             if (image.file) {
               formData.append("images", image.file);
-            } else {
-              formData.append(`image_urls[${index}]`, image);
             }
           });
         }
