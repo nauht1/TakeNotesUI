@@ -81,8 +81,6 @@ const Home = () => {
           });
         }
 
-        console.log(formData);
-        
         let response;
         if (isEdit) {
           response = await axiosToken.post("/note/update", formData);

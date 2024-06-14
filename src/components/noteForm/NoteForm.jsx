@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./noteForm.scss";
 import {formatDateTime} from "../../utils/Utils.jsx";
 import debounce from "lodash.debounce";
+import { axiosToken } from "../../config/ApiConfig.js";
 
 const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) => {
   const [title, setTitle] = useState("");
@@ -95,6 +96,33 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
     []
   )
 
+  // Remove image on edit modal
+  const removeImage = async (imageUrl) => {
+    try {
+      // Create form data and call api
+      const formData = new FormData();
+      formData.append("id", note.id);
+      formData.append("imageUrl", imageUrl);
+
+      const response = await axiosToken.delete("/note/image/delete", {data: formData});
+
+      // Update UI after successful deletion
+      if (response.status === 200) {
+        const updatedImages = images.filter(img => img !== imageUrl);
+        console.log(updatedImages);
+        setImages(updatedImages);
+        toast.success('Image deleted successfully');
+        onSubmit();
+        updateModifiedTime();
+      } else {
+        throw new Error('Failed to delete image URL from note');
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toast.error('Failed to delete image');
+    }
+  };
+
   // Set class for render images in modal rely on total images of note.
   const getGridClass = () => {
     if (images.length === 0) return '';
@@ -113,15 +141,14 @@ const NoteForm = ({ isOpen, onRequestClose, onSubmit, onChange, note, isEdit }) 
             {images.map((image, index) => (
               <div key={index} className="modal-container">
                 <img src={image.src || image} alt={`note-${index}`} className="modal-thumbnail" />
-                <button className="remove-image-button" onClick={() => removeImage(image.id)}>
+                <button className="remove-image-button" onClick={() => removeImage(image)}>
                   <i className="fa-solid fa-trash"></i>
                 </button>
               </div>
             ))}
           </div>
           )}
-          <input
-            type="text"
+          <textarea
             value={title}
             onChange={handleTitleChange}
             placeholder="Title"
