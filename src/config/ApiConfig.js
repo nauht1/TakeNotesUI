@@ -1,7 +1,13 @@
 import axios from "axios";
 
+const baseURL = " https://chimp-direct-truly.ngrok-free.app/api/v1";
+// const baseURL = "http://localhost:8080/api/v1";
+
 const axiosToken = axios.create({
-  baseURL: "http://localhost:8080/api/v1"
+  baseURL: baseURL,
+  headers: {
+    'ngrok-skip-browser-warning': 'true'
+  }
 });
 
 axiosToken.interceptors.request.use(
@@ -16,7 +22,10 @@ axiosToken.interceptors.request.use(
 );
 
 const axiosNoToken = axios.create({
-  baseURL: "http://localhost:8080/api/v1"
+  baseURL: baseURL,
+  headers: {
+    'ngrok-skip-browser-warning': 'true'
+  }
 });
 
 export {axiosToken,axiosNoToken};
