@@ -12,22 +12,27 @@ const SignUp = ({onSignUp}) => {
   const [fullName, setFullName] = useState('');
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    //Disable button and form
+    setLoading(true);
+
     // clear head and tail spaces of email
     const trimmedEmail = email.trim();
 
     // Check if password is matched
     if (password !== confirmPassword) {
       toast.error("Passwords do not match. Please try again.");
+      setLoading(false);
       return;
     }
 
     if (password.length <= 6 || /\s/.test(password) || !/\d/.test(password)) {
       toast.error("Password must be more than 6 characters, contain no spaces, and include at least one number.");
+      setLoading(false);
       return;
     }
 
@@ -46,6 +51,7 @@ const SignUp = ({onSignUp}) => {
       } else {
         toast.error("Registration failed. Please try again.");
       }
+      setLoading(false);
     }
   }
 
@@ -67,7 +73,7 @@ const SignUp = ({onSignUp}) => {
           <div className="verification-message">
             <p>Registration successful. Please check your email to verify your account.</p>
             <p>If you don't see your email, please check the spam folder !</p>
-            <button className="btn-backToLogin" onClick={backToLogin}>Back to login</button>
+            <button className="btn-backToLogin" onClick={backToLogin} disabled={loading}>Back to login</button>
           </div>
         ) : (
           <>
@@ -79,6 +85,7 @@ const SignUp = ({onSignUp}) => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
+                disabled={loading}
               />
               <input
                 type="email"
@@ -87,6 +94,7 @@ const SignUp = ({onSignUp}) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
               <input
                 type={passwordVisible ? "text" : "password"}
@@ -96,6 +104,7 @@ const SignUp = ({onSignUp}) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
               <input
                 type={passwordVisible ? "text" : "password"}
@@ -104,6 +113,7 @@ const SignUp = ({onSignUp}) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                disabled={loading}
               />
               <span onClick={togglePasswordVisibility} className="password-toggle-icon">
                   Show password
@@ -111,7 +121,7 @@ const SignUp = ({onSignUp}) => {
                                     <i className="fa-solid fa-eye-slash eye-icon"></i>}
                 </span>
             </div>
-            <button type="submit">SIGN UP</button>
+            <button type="submit" disabled={loading}>SIGN UP</button>
             <span className="login-account">
               Already have an account? <Link to="/login">Log in</Link>
             </span>
