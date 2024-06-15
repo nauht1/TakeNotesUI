@@ -3,7 +3,7 @@ import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
 import "./login.scss";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -68,7 +68,7 @@ const Login = ({ onLogin }) => {
           Log in with Google
         </button>
         <span className="register-account">
-          Don't have an account? <a href="/signup">Sign up</a>
+          Don't have an account? <Link to="/signup">Sign up</Link>
         </span>
       </form>
       <ToastContainer />
