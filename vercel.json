@@ -1,8 +1,6 @@
 {
   "rewrites": [
-    { "source": "/verify/(.*)", "destination": "/verify?code=$1" }
-  ],
-  "redirects": [
-    { "source": "/verify/(.*)", "destination": "/verify?code=$1" }
+    { "source": "/verify", "destination": "/verify" },
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
