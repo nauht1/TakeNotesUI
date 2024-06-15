@@ -2,12 +2,14 @@ import React, { useRef, useState } from "react";
 import "./header.scss";
 import { Link, useNavigate } from "react-router-dom";
 import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
+import { useNotes } from "../../context/NotesContext.jsx";
 
 const Header = ({onMenuClick, userProfile, onLogout}) => {
   const [showCloseIcon, setShowCloseIcon] = useState(false);
   const inputRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const { fetchNotes } = useNotes();
 
   const handleInputFocus = () => {
     setShowCloseIcon(true);
@@ -41,6 +43,19 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
       console.error("Logout failed", error);
     }
   };
+
+  const handleRefreshClick = () => {
+    // animation for loading refresh button
+    const refreshButton = document.querySelector(".refresh");
+    refreshButton.classList.add("spin");
+
+    setTimeout(() => {
+      refreshButton.classList.remove("spin");
+    }, 2000);
+    
+    fetchNotes();
+  };
+
 	return (
     <header className="header">
       <div className="container-first">
@@ -70,7 +85,7 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
         </div>
       </div>
       <div className="container-second">
-        <div className="refresh">
+        <div className="refresh" onClick={handleRefreshClick}>
           <i className="fa-solid fa-arrows-rotate"></i>
         </div>
         <div className="setting">

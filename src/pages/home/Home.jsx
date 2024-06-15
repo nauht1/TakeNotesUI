@@ -5,25 +5,16 @@ import Modal from "react-modal";
 import NoteForm from "../../components/noteForm/NoteForm.jsx";
 import { axiosToken } from "../../config/ApiConfig.js";
 import debounce from "lodash.debounce";
-
+import { useNotes } from "../../context/NotesContext.jsx";
 Modal.setAppElement("#root");
 
 const Home = () => {
-  const [notes, setNotes] = useState([]);
+  const { notes, fetchNotes, setNotes } = useNotes();
+  // const [notes, setNotes] = useState([]);
   const [isNoteFormOpen, setIsNoteFormOpen] = useState(false);
   const [currentNote, setCurrentNote] = useState({ id: "", title: "", content: "", images: [], created: "" });
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-
-  // Fetch notes of auth user from server
-  const fetchNotes = async () => {
-    try {
-      const response = await axiosToken.get("/note/all");
-      setNotes(response.data.body);
-    } catch (error) {
-      console.error("Failed to fetch notes:", error);
-    }
-  };
 
   useEffect(() => {
     fetchNotes();

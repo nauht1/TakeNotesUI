@@ -103,6 +103,10 @@
       border-radius: 50%;
       font-size: 1.3rem;
       margin-right: 10px;
+
+      &.spin {
+        animation: spin 1.5s linear;
+      }
     }
     .refresh:hover {
        background-color: $header-hover-color;
@@ -167,6 +171,15 @@
           }
         }
       }
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
 }
