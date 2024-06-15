@@ -1,26 +1,26 @@
-.login-container {
+.signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #f0f0f0;
 
-  .login-text {
+  .signup-text {
     color: #1A73E8;
   }
 
   form {
     background: white;
-    width: 300px;
+    width: 350px;
     height: auto;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     
     
-    .login-content {
+    .signup-content {
       input {
-        width: 30vh;
+        width: 35vh;
         padding: 10px;
         margin: 5px;
         border: 1px solid #ccc;
@@ -28,6 +28,19 @@
         background: #fff;
         color: black;
         font-size: 16px;
+      }
+      
+      .password-toggle-icon {
+        display: flex;
+        margin: 5px 0;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 10px;
+        cursor: pointer;
+
+        .eye-icon {
+          padding: 5px;
+        }
       }
     }
     
@@ -47,45 +60,16 @@
       background-color: #0056b3;
     }
 
-    .btn-option-google {
-      background-color: transparent;
-      color: black;
-      border: 1px solid #333;
-
-      .icon-google {
-        margin-right: 10px;
-      }
-      
-      &:hover {
-        color: white;
-      }
-    }
-
-    .register-account {
+    .login-account {
       a {
         text-decoration: none;
         color: #1A73E8;
 
         &:hover {
           color: #0f458a;
+
         }
       }
     }
-
-    .divider {
-      overflow: unset;
-      position: relative;
-      margin: 24px 0;
-
-      &::after {
-        content: attr(data-divider);
-        position: absolute;
-        padding: 0 10px;
-        top: -15px;
-        left: calc(50% - 26px);
-        background-color: #FFFFFF;
-      }
-    }
-
   }  
 }

@@ -37,7 +37,8 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
-        <h2>TakeNotes</h2>
+        <h1 className="login-text">TakeNotes</h1>
+        <h2>Sign In</h2>
         <div className="login-content">
           <input
             type="text"
@@ -60,13 +61,15 @@ const Login = ({ onLogin }) => {
           Forgot password?
         </span>
         <button type="submit">SIGN IN</button>
-        <span className="register-account">
-          Don't have an account? Sign up
-        </span>
-        <button type="button">
-          <i className="fa-brands fa-google"></i>
+        <br />
+        <hr className="divider" data-divider="or"></hr>
+        <button type="button" className="btn-option-google">
+          <i className="fa-brands fa-google icon-google"></i>
           Log in with Google
         </button>
+        <span className="register-account">
+          Don't have an account? <a href="/signup">Sign up</a>
+        </span>
       </form>
       <ToastContainer />
     </div>

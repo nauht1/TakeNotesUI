@@ -1,0 +1,33 @@
+.success-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f0f0f0;
+  height: 100vh;
+  width: 100%;
+  font-size: 16px;
+
+  .success-content {
+    background: white;
+    width: 500px;
+    height: auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .success-notification {
+      color: #009743;
+    }
+
+    .success-btn {
+      background-color: #009743;
+      width: 40%;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+
+  }
+}

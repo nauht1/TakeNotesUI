@@ -9,6 +9,9 @@ import Trash from './pages/trash/Trash.jsx'
 import NotFound from './pages/notFound/NotFound.jsx'
 import ProtectedRoute from './components/router/ProtectedRoute.jsx'
 import Profile from './pages/profile/Profile.jsx'
+import SignUp from './pages/signUp/SignUp.jsx'
+import VerifyAccount from './pages/verify/VerifyAccount.jsx'
+import VerifySuccessfully from './pages/verify/VerifySuccessfully.jsx'
 
 const MainLayout = ({ isSidebarCollapsed, onMenuClick, userProfile, onLogout, children }) => {
   return (
@@ -65,6 +68,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify" element={<VerifyAccount />} />
+        <Route path="/verifySuccessfully" element={<VerifySuccessfully />} />
+        
         <Route 
           path="/profile" 
           element={
