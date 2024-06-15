@@ -3,7 +3,7 @@ import { axiosNoToken } from "../../config/ApiConfig.js";
 import "./signUp.scss";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignUp = ({onSignUp}) => {
   const [email, setEmail] = useState('');
@@ -113,7 +113,7 @@ const SignUp = ({onSignUp}) => {
             </div>
             <button type="submit">SIGN UP</button>
             <span className="login-account">
-              Already have an account? <a href="/login">Log in</a>
+              Already have an account? <Link to="/login">Log in</Link>
             </span>
           </>
         )}
