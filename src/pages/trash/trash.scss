@@ -1,0 +1,14 @@
+.trash-section {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .notes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
+

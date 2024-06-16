@@ -1,7 +1,7 @@
 .note-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  // display: flex;
+  // flex-wrap: wrap;
+  // align-items: flex-start;
 }
 
 .note-modified {
@@ -18,9 +18,14 @@
   width: 250px;
   margin: 10px;
   text-align: start;
+  position: relative;
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    .btn-groups {
+      display: inline-block;
+    }
   }
 
   .note-images {
@@ -69,6 +74,28 @@
 
   .note-text {
     white-space: pre-line;
+  }
+
+  .btn-groups {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 3px;
+    display: flex;
+    gap: 2px;
+    display: none;
+
+    .restore-button {
+      cursor: pointer;
+    }
+  
+    .delete-button {
+      cursor: pointer;
+    }
+  
+    .move-button {
+      cursor: pointer;
+    }
   }
 }
 

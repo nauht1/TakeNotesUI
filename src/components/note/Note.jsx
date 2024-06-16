@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import "./note.scss";
 import {formatDateTime} from "../../utils/Utils.jsx";
 
-const Note = ({ id, title, content, images, created, onEdit }) => {
+const Note = ({ id, title, content, images, created, onEdit, onMove, onDelete, onRestore }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -37,6 +37,21 @@ const Note = ({ id, title, content, images, created, onEdit }) => {
     onEdit({ id, title, content, images, created });
   };
 
+  const handleMoveClick = (e) => {
+    e.stopPropagation();
+    onMove(id);
+  };
+
+  const handleRestoreClick = (e) => {
+    e.stopPropagation();
+    onRestore(id);
+  }
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    onDelete(id);
+  }
+
   //Format date time for modified
   const formattedDate = formatDateTime(created);
   
@@ -59,7 +74,13 @@ const Note = ({ id, title, content, images, created, onEdit }) => {
         <div className="note-modified">
           <p>Last modified: {formattedDate}</p>
         </div>
+        <div className="btn-groups">
+          {onRestore && <button className="restore-button" onClick={handleRestoreClick}><i className="fa-solid fa-rotate-left"></i></button>}
+          {onDelete && <button className="delete-button" onClick={handleDeleteClick}><i className="fa-solid fa-trash-can"></i></button>}
+          {onMove && <button className="move-button" onClick={handleMoveClick}><i className="fa-solid fa-trash-can"></i></button>}
+        </div>
       </div>
+
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal" overlayClassName="overlay">
         <div className="modal-content">
           <div className={`modal-images-grid ${getGridClass()}`}>
@@ -76,7 +97,7 @@ const Note = ({ id, title, content, images, created, onEdit }) => {
           <p>Last modified: {formattedDate}</p>
         </div>
         <div className="btns-group">
-          <button className="edit-button" onClick={() => { closeModal(); handleEditClick(); }}>Edit</button>
+          {!onRestore && <button className="edit-button" onClick={() => { closeModal(); handleEditClick(); }}>Edit</button>}
           <button onClick={closeModal} className="close-button">Close</button>
         </div>
       </Modal>

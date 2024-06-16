@@ -6,6 +6,8 @@ import NoteForm from "../../components/noteForm/NoteForm.jsx";
 import { axiosToken } from "../../config/ApiConfig.js";
 import debounce from "lodash.debounce";
 import { useNotes } from "../../context/NotesContext.jsx";
+import { postFormUrlEncoded } from "../../utils/ApiUtils.js";
+
 Modal.setAppElement("#root");
 
 const Home = () => {
@@ -104,8 +106,18 @@ const Home = () => {
     [isEdit, editIndex, notes]
   );
 
-  const saveNoteRef = useRef(saveNote);
+  // Move note to trash
+  const moveNote = async (id) => {
+    try {
+      await postFormUrlEncoded("/note/move", { id });
+      fetchNotes();
+    } catch (error) {
+      console.error("Failed to move note:", error);
+    }
+  };
 
+  const saveNoteRef = useRef(saveNote);
+  
   useEffect(() => {
     saveNoteRef.current = saveNote;
   }, [saveNote]);
@@ -114,7 +126,7 @@ const Home = () => {
     setCurrentNote(note);
     saveNoteRef.current(note);
   };
-
+  
   return (
     <div className="home-section">
       <div className="create-note" onClick={() => openNoteForm()}>
@@ -133,6 +145,7 @@ const Home = () => {
             images={note.image_urls}
             created={note.created}
             onEdit={() => openNoteForm(note, index)}
+            onMove={() => moveNote(note.id)}
           />
         ))}
       </div>
