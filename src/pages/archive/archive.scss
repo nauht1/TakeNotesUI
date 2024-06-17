@@ -1,0 +1,31 @@
+.archive-section {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .notes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .archive-button {
+    position: relative;
+  }
+
+  .archive-button::after {
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    transform: rotate(140deg);
+    top: 8px;
+    left: 2px;
+    font-size: 20px;
+    color: black;
+  }
+}
+

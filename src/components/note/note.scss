@@ -23,8 +23,12 @@
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
-    .btn-groups {
-      display: inline-block;
+    .btn-groups-top {
+      display: flex;
+    }
+
+    .btn-groups-bot {
+      display: flex;
     }
   }
 
@@ -76,7 +80,7 @@
     white-space: pre-line;
   }
 
-  .btn-groups {
+  .btn-groups-top {
     position: absolute;
     top: 0;
     right: 0;
@@ -96,6 +100,15 @@
     .move-button {
       cursor: pointer;
     }
+  }
+
+  .btn-groups-bot {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    gap: 2px;
+    display: none;
   }
 }
 

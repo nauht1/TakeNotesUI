@@ -1,45 +1,35 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import "./home.scss";
-import Note from "../../components/note/Note.jsx";
-import Modal from "react-modal";
-import NoteForm from "../../components/noteForm/NoteForm.jsx";
-import { axiosToken } from "../../config/ApiConfig.js";
+import Note from "../../components/note/Note";
+import "./archive.scss";
+import { axiosToken } from "../../config/ApiConfig";
 import debounce from "lodash.debounce";
-import { useNotes } from "../../context/NotesContext.jsx";
-import { postFormUrlEncoded } from "../../utils/ApiUtils.js";
+import Modal from "react-modal";
+import NoteForm from "../../components/noteForm/NoteForm";
+import { postFormUrlEncoded } from "../../utils/ApiUtils";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
+/// Duplicated Home component, reusable
 Modal.setAppElement("#root");
 
-const Home = () => {
-  const { notes, fetchNotes, setNotes } = useNotes();
-  // const [notes, setNotes] = useState([]);
+const Archive = () => {
+  const [notes, setNotes] = useState([]);
   const [isNoteFormOpen, setIsNoteFormOpen] = useState(false);
   const [currentNote, setCurrentNote] = useState({ id: "", title: "", content: "", images: [], created: "" });
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
-    fetchNotes();
+    fetchArchiveNotes();
   }, []);
 
-  //Create a null note when click on 'Note here'
-  const createNewNote = async () => {
+  //fetch notes in archive (important = true)
+  const fetchArchiveNotes = async () => {
     try {
-      const response = await axiosToken.post("/note/add", new FormData());
-      const newNote = response.data.body;
-      setCurrentNote({
-        id: newNote.id,
-        title: "",
-        content: "",
-        images: [],
-        created: newNote.created,
-      });
-      setIsEdit(false);
-      setIsNoteFormOpen(true);
+      const response = await axiosToken.get("note/all/archive");
+      setNotes(response.data.body);
     } catch (error) {
-      console.error("Failed to create new note:", error);
+      console.error("Falied to fetch notes", error);
     }
   };
 
@@ -60,7 +50,8 @@ const Home = () => {
     setIsEdit(false);
     setEditIndex(null);
   };
-
+  
+  // auto save note after 2s from the last input
   const saveNote = useCallback(
     debounce(async (note) => {
       try {
@@ -79,8 +70,6 @@ const Home = () => {
         let response;
         if (isEdit) {
           response = await axiosToken.post("/note/update", formData);
-        } else {
-          response = await axiosToken.post("/note/add", formData);
         }
 
         const updatedNote = response.data.body;
@@ -107,28 +96,7 @@ const Home = () => {
     }, 2000),
     [isEdit, editIndex, notes]
   );
-
-  // Move note to trash
-  const moveNote = async (id) => {
-    try {
-      await postFormUrlEncoded("/note/move", { id });
-      fetchNotes();
-    } catch (error) {
-      console.error("Failed to move note:", error);
-    }
-  };
-
-  // Mark note, move to archive
-  const markNote = async (id) => {
-    try {
-      await postFormUrlEncoded("/note/mark", { id });
-      fetchNotes();
-      toast.success("Mark note successfully")
-    } catch (error) {
-      console.error("Failed to mark note:", error);
-    }
-  }
-
+  
   const saveNoteRef = useRef(saveNote);
   
   useEffect(() => {
@@ -139,15 +107,31 @@ const Home = () => {
     setCurrentNote(note);
     saveNoteRef.current(note);
   };
-  
+
+  // Move note to trash
+  const moveNote = async (id) => {
+    try {
+      await postFormUrlEncoded("/note/move", { id });
+      fetchArchiveNotes();
+      toast.success("Successfully moved note");
+    } catch (error) {
+      console.error("Failed to move note to trash", error);
+    }
+  };
+
+  // Unmark note
+  const markNote = async(id) => {
+    try {
+      await postFormUrlEncoded("/note/mark", { id });
+      fetchArchiveNotes();
+      toast.success("Successfully unmarked note");
+    } catch (error) {
+      console.error("Failed to unmark note", error);
+    }
+  }
+
   return (
-    <div className="home-section">
-      <div className="create-note" onClick={() => openNoteForm()}>
-        <input type="text" placeholder="Note here" readOnly />
-        <div className="icons">
-          <span>✏️</span> <span>🖼️</span>
-        </div>
-      </div>
+    <div className="archive-section">
       <div className="notes-grid">
         {notes.map((note, index) => (
           <Note
@@ -174,10 +158,9 @@ const Home = () => {
           isEdit={isEdit}
         />
       )}
-
-      <ToastContainer/>
+      <ToastContainer />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Archive;

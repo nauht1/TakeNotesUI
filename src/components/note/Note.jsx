@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import "./note.scss";
 import {formatDateTime} from "../../utils/Utils.jsx";
 
-const Note = ({ id, title, content, images, created, onEdit, onMove, onDelete, onRestore }) => {
+const Note = ({ id, title, content, images, created, onEdit, onMove, onDelete, onRestore, onMark }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -52,6 +52,11 @@ const Note = ({ id, title, content, images, created, onEdit, onMove, onDelete, o
     onDelete(id);
   }
 
+  const handleMarkNote = (e) => {
+    e.stopPropagation();
+    onMark(id);
+  }
+  
   //Format date time for modified
   const formattedDate = formatDateTime(created);
   
@@ -74,10 +79,14 @@ const Note = ({ id, title, content, images, created, onEdit, onMove, onDelete, o
         <div className="note-modified">
           <p>Last modified: {formattedDate}</p>
         </div>
-        <div className="btn-groups">
+        <div className="btn-groups-top">
           {onRestore && <button className="restore-button" onClick={handleRestoreClick}><i className="fa-solid fa-rotate-left"></i></button>}
           {onDelete && <button className="delete-button" onClick={handleDeleteClick}><i className="fa-solid fa-trash-can"></i></button>}
           {onMove && <button className="move-button" onClick={handleMoveClick}><i className="fa-solid fa-trash-can"></i></button>}
+        </div>
+        <div className="btn-groups-bot">
+          <button className="archive-button" onClick={handleMarkNote}><i className="fa-solid fa-box-archive"></i></button>
+          <button className="pin-button"><i className="fa-solid fa-thumbtack"></i></button>
         </div>
       </div>
 

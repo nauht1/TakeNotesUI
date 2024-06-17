@@ -12,6 +12,7 @@ import Profile from './pages/profile/Profile.jsx'
 import SignUp from './pages/signUp/SignUp.jsx'
 import VerifyAccount from './pages/verify/VerifyAccount.jsx'
 import VerifySuccessfully from './pages/verify/VerifySuccessfully.jsx'
+import Archive from './pages/archive/Archive.jsx'
 
 const MainLayout = ({ isSidebarCollapsed, onMenuClick, userProfile, onLogout, children }) => {
   return (
@@ -110,6 +111,20 @@ function App() {
                 userProfile={userProfile}
                 onLogout={handleLogout}>
                 <Home />
+              </MainLayout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/archive" 
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <MainLayout 
+                isSidebarCollapsed={isSidebarCollapsed} 
+                onMenuClick={handleMenuClick} 
+                userProfile={userProfile}
+                onLogout={handleLogout}>
+                <Archive />
               </MainLayout>
             </ProtectedRoute>
           } 
