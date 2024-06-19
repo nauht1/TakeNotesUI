@@ -1,0 +1,28 @@
+.regular-note {
+  .pin-button {
+    display: none;
+  }
+}
+
+.archive-note {
+  .archive-button {
+    position: relative;
+  }
+
+  .archive-button::after {
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    transform: rotate(140deg);
+    top: 8px;
+    left: 2px;
+    font-size: 20px;
+    color: black;
+  }
+
+  .pin-button {
+    display: none;
+  }
+}

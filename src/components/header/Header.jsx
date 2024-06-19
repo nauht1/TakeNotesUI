@@ -3,6 +3,7 @@ import "./header.scss";
 import { Link, useNavigate } from "react-router-dom";
 import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
 import { useNotes } from "../../context/NotesContext.jsx";
+import Search from "../seach/Search.jsx";
 
 const Header = ({onMenuClick, userProfile, onLogout}) => {
   const [showCloseIcon, setShowCloseIcon] = useState(false);
@@ -65,24 +66,7 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
         <Link to = "/home">
           <div className="logo"></div>
         </Link>
-        <div className="search-bar">
-          <div className="search-input">
-            <div className="seacrh-icon">
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <input type="text" 
-              placeholder="Search" 
-              onFocus={handleInputFocus} 
-              onBlur={handleInputBlur} 
-              ref={inputRef} />
-            
-            {showCloseIcon && (
-              <div className="close-icon" onClick={handleCloseClick}>
-                <i className="fa-solid fa-xmark"></i>
-              </div>
-            )}
-          </div>
-        </div>
+        <Search />
       </div>
       <div className="container-second">
         <div className="refresh" onClick={handleRefreshClick}>
