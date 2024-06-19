@@ -6,7 +6,7 @@ import NoteForm from "../../components/noteForm/NoteForm.jsx";
 import { axiosToken } from "../../config/ApiConfig.js";
 import debounce from "lodash.debounce";
 import { useNotes } from "../../context/NotesContext.jsx";
-import { postFormUrlEncoded } from "../../utils/ApiUtils.js";
+import { deleteFormUrlEncoded, postFormUrlEncoded } from "../../utils/ApiUtils.js";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,7 +24,7 @@ const Home = () => {
     fetchNotes();
   }, []);
 
-  //Create a null note when click on 'Note here'
+  // dont remove it
   const createNewNote = async () => {
     try {
       const response = await axiosToken.post("/note/add", new FormData());
@@ -59,6 +59,10 @@ const Home = () => {
     setCurrentNote({ id: "", title: "", content: "", images: [], created: "" });
     setIsEdit(false);
     setEditIndex(null);
+
+    if (!currentNote.title.trim() && !currentNote.content.trim()) {
+      deleteNullNote(currentNote.id);
+    }
   };
 
   const saveNote = useCallback(
@@ -81,6 +85,10 @@ const Home = () => {
           response = await axiosToken.post("/note/update", formData);
         } else {
           response = await axiosToken.post("/note/add", formData);
+          if (response.data.body.title == null && response.data.body.content == null) {
+            deleteNullNote(response.data.body.id); // Call deleteNullNote if the note is empty
+            return;
+          }
         }
 
         const updatedNote = response.data.body;
@@ -128,6 +136,15 @@ const Home = () => {
       console.error("Failed to mark note:", error);
     }
   }
+
+  // Delete note
+  const deleteNullNote = async (id) => {
+    try {
+      await deleteFormUrlEncoded("/note/deleteNullNote", {id});
+    } catch (error) {
+      console.error("Failed to delete note", error);
+    }
+  };
 
   const saveNoteRef = useRef(saveNote);
   
