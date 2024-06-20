@@ -132,6 +132,34 @@ function App() {
           } 
         />
         <Route 
+          path="/reminders" 
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <MainLayout 
+                isSidebarCollapsed={isSidebarCollapsed} 
+                onMenuClick={handleMenuClick} 
+                userProfile={userProfile}
+                onLogout={handleLogout}>
+                <h1>Not available 😢</h1>
+              </MainLayout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/labels" 
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <MainLayout 
+                isSidebarCollapsed={isSidebarCollapsed} 
+                onMenuClick={handleMenuClick} 
+                userProfile={userProfile}
+                onLogout={handleLogout}>
+                <h1>Not available 😢</h1>
+              </MainLayout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/archive" 
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>

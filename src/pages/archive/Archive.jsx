@@ -132,6 +132,7 @@ const Archive = () => {
 
   return (
     <div className="archive-section">
+      <h2>My archive</h2>
       <div className="notes-grid">
         {notes.map((note, index) => (
           <Note

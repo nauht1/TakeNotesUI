@@ -13,35 +13,35 @@ const Sidebar = ({isCollapsed}) => {
         <div className="sidebar-icon">
           <i className="fa-solid fa-lightbulb"></i>
         </div>
-        <span>Ghi chú</span>
+        <span>Notes</span>
       </Link>
       <Link to="/reminders" className={`sidebar-item ${isCollapsed ? 'collapsed' : ''} 
           ${location.pathname === "/reminders" ? 'active' : ''}`}>
         <div className="sidebar-icon">
           <i className="fa-solid fa-bell"></i>
         </div>
-        <span>Lời nhắc</span>
+        <span>Reminders</span>
       </Link>
       <Link to="/labels" className={`sidebar-item ${isCollapsed ? 'collapsed' : ''} 
           ${location.pathname === "/labels" ? 'active' : ''}`}>
         <div className="sidebar-icon">
           <i className="fa-solid fa-pen"></i>
         </div>
-        <span>Chỉnh sửa nhãn</span>
+        <span>Labels</span>
       </Link>
       <Link to="/archive" className={`sidebar-item ${isCollapsed ? 'collapsed' : ''} 
           ${location.pathname === "/archive" ? 'active' : ''}`}>
         <div className="sidebar-icon">
           <i className="fa-solid fa-box-archive"></i>
         </div>
-        <span>Lưu trữ</span>
+        <span>Archive</span>
       </Link>
       <Link to="/trash" className={`sidebar-item ${isCollapsed ? 'collapsed' : ''} 
           ${location.pathname === "/trash" ? 'active' : ''}`}>
         <div className="sidebar-icon">
           <i className="fa-solid fa-trash"></i>
         </div>
-        <span>Thùng rác</span>
+        <span>Trash</span>
       </Link>
     </div>
   )
