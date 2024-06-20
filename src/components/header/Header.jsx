@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./header.scss";
 import { Link, useNavigate } from "react-router-dom";
 import {axiosToken, axiosNoToken} from "../../config/ApiConfig.js";
@@ -6,27 +6,11 @@ import { useNotes } from "../../context/NotesContext.jsx";
 import Search from "../seach/Search.jsx";
 
 const Header = ({onMenuClick, userProfile, onLogout}) => {
-  const [showCloseIcon, setShowCloseIcon] = useState(false);
   const inputRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const { fetchNotes } = useNotes();
-
-  const handleInputFocus = () => {
-    setShowCloseIcon(true);
-  }
-
-  const handleInputBlur = () => {
-    if (inputRef.current.value === "") {
-      setShowCloseIcon(false);
-    }
-  }
-
-  const handleCloseClick = () => {
-    setShowCloseIcon(false);
-    inputRef.current.value = "";
-    inputRef.current.blur();
-  }
+  const dropdownRef = useRef(null);
 
   const handleUserClick = () => {
     setShowDropdown(!showDropdown);
@@ -57,6 +41,20 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
     fetchNotes();
   };
 
+  // Close dropdown menu when clicked outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
 	return (
     <header className="header">
       <div className="container-first">
@@ -78,7 +76,7 @@ const Header = ({onMenuClick, userProfile, onLogout}) => {
         <div className="user" onClick={handleUserClick}>
           <img src={userProfile?.avatar_url || "/vite.svg"} alt="user_avatar" />
           {showDropdown && (
-            <div className="dropdown-menu">
+            <div className="dropdown-menu" ref={dropdownRef}>
               <Link to="/profile"className="menu-item" >
                 <i className="fa-solid fa-address-card menu-icon"></i><span>Profile</span>
               </Link>

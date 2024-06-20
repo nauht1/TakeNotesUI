@@ -9,9 +9,7 @@
   }
 
   .profile-details {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+    margin-top: 10px;
 
     img {
       width: 100px;
@@ -21,13 +19,13 @@
     }
 
     .profile-info {
+      padding: 10px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-
-      p {
-        margin: 0;
-      }
+      border: 1px solid #333;
+      border-radius: 10px;
+      text-align: left;
     }
   }
 }
