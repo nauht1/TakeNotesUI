@@ -47,18 +47,10 @@
       background-color: #0056b3;
     }
 
-    .btn-option-google {
-      background-color: transparent;
-      color: black;
-      border: 1px solid #333;
-
-      .icon-google {
-        margin-right: 10px;
-      }
-      
-      &:hover {
-        color: white;
-      }
+    .google-login-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
     }
 
     .register-account {

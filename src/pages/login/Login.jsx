@@ -97,10 +97,12 @@ const Login = ({ onLogin }) => {
           <button type="submit">SIGN IN</button>
           <br />
           <hr className="divider" data-divider="or"></hr>
-          <GoogleLogin
-            onSuccess={onGoogleLoginSuccess}
-            onError={onGoogleLoginFailure}
-          />
+          <div className="google-login-wrapper">
+            <GoogleLogin
+              onSuccess={onGoogleLoginSuccess}
+              onError={onGoogleLoginFailure}
+            />
+          </div>
           <span className="register-account">
             Don't have an account? <a href="/signup">Sign up</a>
           </span>
