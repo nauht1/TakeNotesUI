@@ -4,6 +4,7 @@ import "./login.scss";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, Link } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -34,45 +35,79 @@ const Login = ({ onLogin }) => {
     }
   }
 
+  const onGoogleLoginSuccess = async (tokenResponse) => {
+    try {
+      const { credential } = tokenResponse;
+      const googleLoginResponse = await axiosNoToken.post("/auth/oauth2/login", {
+        tokenId: credential,
+      });
+  
+      const { accessToken, refreshToken } = googleLoginResponse.data;
+      if (!accessToken || !refreshToken) {
+        throw new Error("Failed to retrieve tokens");
+      }
+  
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+  
+      const profileResponse = await axiosToken.get("/user/profile");
+      const userProfile = profileResponse.data.body;
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+  
+      toast.success("Login successful!");
+      navigate('/');
+      onLogin(userProfile);
+    } catch (error) {
+      toast.error("Google login failed. Please try again.");
+    }
+  };
+
+  const onGoogleLoginFailure = (error) => {
+    console.error(error);
+    toast.error("Google login failed. Please try again.");
+  };
+
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit}>
-        <h1 className="login-text">TakeNotes</h1>
-        <h2>Sign In</h2>
-        <div className="login-content">
-          <input
-            type="text"
-            placeholder="Email"
-            className="content-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
+      <div className="login-container">
+        <form onSubmit={handleSubmit}>
+          <h1 className="login-text">TakeNotes</h1>
+          <h2>Sign In</h2>
+          <div className="login-content">
+            <input
+              type="text"
+              placeholder="Email"
+              className="content-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="content-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <span className="forgot-password">
+            Forgot password?
+          </span>
+          <button type="submit">SIGN IN</button>
+          <br />
+          <hr className="divider" data-divider="or"></hr>
+          <GoogleLogin
+            onSuccess={onGoogleLoginSuccess}
+            onError={onGoogleLoginFailure}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="content-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <span className="forgot-password">
-          Forgot password?
-        </span>
-        <button type="submit">SIGN IN</button>
-        <br />
-        <hr className="divider" data-divider="or"></hr>
-        <button type="button" className="btn-option-google">
-          <i className="fa-brands fa-google icon-google"></i>
-          Log in with Google
-        </button>
-        <span className="register-account">
-          Don't have an account? <Link to="/signup">Sign up</Link>
-        </span>
-      </form>
-      <ToastContainer />
-    </div>
+          <span className="register-account">
+            Don't have an account? <a href="/signup">Sign up</a>
+          </span>
+        </form>
+        <ToastContainer />
+      </div>
+    </GoogleOAuthProvider>
   )
 }
 
